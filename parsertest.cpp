@@ -41,6 +41,8 @@ namespace {
         EXPECT_NE(crights.end(), crights.find(CastleRight::WHITE_KINGSIDE_CASTLE));
         EXPECT_NE(crights.end(), crights.find(CastleRight::BLACK_QUEENSIDE_CASTLE));
         EXPECT_NE(crights.end(), crights.find(CastleRight::BLACK_QUEENSIDE_CASTLE));
+        
+        EXPECT_FALSE(board.getEnPassentPos().has_value());
     }
     TEST(FenParserTest, PosWhiteToMove) {
         FENParser parser;
@@ -58,6 +60,7 @@ namespace {
         EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(BoardPos(4,0)));
         
         EXPECT_EQ(0, board.getCastleRights().size());
+        EXPECT_FALSE(board.getEnPassentPos().has_value());
     }
     TEST(FenParserTest, PosBlackToMove) {
         FENParser parser;
@@ -75,10 +78,15 @@ namespace {
         EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(BoardPos(4,0)));
 
         EXPECT_EQ(0, board.getCastleRights().size());
+        EXPECT_FALSE(board.getEnPassentPos().has_value());
     }
     TEST(FenParserTest, EnPassant) {
         FENParser parser;
         SimpleBoard board;
         EXPECT_TRUE(parser.parse("rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6", board));
+        EXPECT_TRUE(board.getEnPassentPos().has_value());
+        BoardPos bp = board.getEnPassentPos().value();
+        EXPECT_EQ(5, bp.getRank());
+        EXPECT_EQ(5, bp.getFile());
     }
 }

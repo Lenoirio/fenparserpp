@@ -24,9 +24,15 @@ bool FENParser::parse(const std::string& fen, BoardListener &listener) {
         listener.setToPlay(PieceColor::BLACK);
     }
 
-     if(splitted.size()>2) {
-            handleCastlingRights(listener, splitted.at(2));
+    if(splitted.size()>2) {
+        handleCastlingRights(listener, splitted.at(2));
+    }
+    
+    if(splitted.size()>3) {
+        if(!handleEnPassent(listener, splitted.at(3))) {
+            return false;
         }
+    }
 
     return true;
 }
@@ -61,6 +67,22 @@ void FENParser::handleCastlingRights(BoardListener &listener, const std::string&
         listener.setCastleRight(CastleRight::BLACK_QUEENSIDE_CASTLE);
     }    
 }
+
+bool FENParser::handleEnPassent(BoardListener &listener, const std::string& s) {
+    if(s == "-") {
+        return true;
+    }
+    if(s.size() == 2) {
+        char file = s.at(0);
+        char rank = s.at(1);
+        if(file>='a' && file <='h' && rank >='1' && rank<='8') {
+            listener.setEnPassentPos( BoardPos(file-'a', rank-'0'-1) );
+            return true;
+        }
+    }
+    return false;
+}
+
 
 Piece FENParser::getPieceFromChar(char ch) {
     switch(tolower(ch)) {
@@ -105,6 +127,7 @@ SimpleBoard::SimpleBoard() {
 
 void SimpleBoard::reset() {
     castleRights.clear();
+    enPassentPos = {};
     for(int row =0;row<8;row++) {
         for(int rank=0;rank<8;rank++) {
             board[rank][row] = Piece::NONE;

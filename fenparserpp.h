@@ -4,6 +4,9 @@
 #include <sstream>
 #include <vector>
 #include <unordered_set>
+#include <optional>
+
+//https://de.wikipedia.org/wiki/Forsyth-Edwards-Notation
 
 namespace fenparserpp
 {
@@ -28,6 +31,8 @@ namespace fenparserpp
         WHITE_QUEENSIDE_CASTLE
     };
 
+    // This represents a position on the board (0-based!)
+    // E.g.  F6  will return rank and file as 5
     class BoardPos {
         private:
             int file;
@@ -47,6 +52,7 @@ namespace fenparserpp
             virtual void reset() = 0;
             virtual void setPiece(const BoardPos &bpos, Piece piece, PieceColor pieceColor) = 0;
             virtual void setCastleRight(CastleRight right) = 0;
+            virtual void setEnPassentPos(const BoardPos &bpos) = 0;
             virtual void setToPlay(PieceColor color) = 0;
     };
 
@@ -56,6 +62,7 @@ namespace fenparserpp
             PieceColor boardColor[8][8];
             PieceColor toPlay;
             std::unordered_set<CastleRight> castleRights;
+            std::optional<BoardPos> enPassentPos;
         public:
             SimpleBoard();
             void reset();
@@ -64,7 +71,9 @@ namespace fenparserpp
             PieceColor getPieceColor(const BoardPos &bpos) const;
             void setCastleRight(CastleRight right);
             inline void setToPlay(PieceColor pc) { toPlay = pc; }
-            inline const PieceColor getToPlay() { return toPlay; }
+            inline PieceColor getToPlay() const { return toPlay; }
+            inline void setEnPassentPos(const BoardPos &bpos) { enPassentPos = bpos; }
+            inline std::optional<BoardPos> getEnPassentPos() const { return enPassentPos; }
             inline const std::unordered_set<CastleRight>& getCastleRights() { return castleRights; }
     };
 
@@ -75,6 +84,7 @@ namespace fenparserpp
 
     private:
         void handleCastlingRights(BoardListener &listener, const std::string& s);
+        bool handleEnPassent(BoardListener &listener, const std::string& s);
         bool decodeRank(const std::string& rank, int rankNr, BoardListener &listener);
         std::vector<std::string> split(const std::string& s, char delim);
         Piece getPieceFromChar(char ch);
