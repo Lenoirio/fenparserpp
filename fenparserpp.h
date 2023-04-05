@@ -28,12 +28,24 @@ namespace fenparserpp
         WHITE_QUEENSIDE_CASTLE
     };
 
+    class BoardPos {
+        private:
+            int file;
+            int rank;
+        public:
+            inline BoardPos(int fe, int rk) {
+                file = fe;
+                rank = rk;
+            }
+            inline int getFile() const { return file; }
+            inline int getRank() const { return rank; }
+    };
     // TODO en passant position
 
     class BoardListener {
         public:
             virtual void reset() = 0;
-            virtual void setPiece(int file, int rank, Piece piece, PieceColor pieceColor) = 0;
+            virtual void setPiece(const BoardPos &bpos, Piece piece, PieceColor pieceColor) = 0;
             virtual void setCastleRight(CastleRight right) = 0;
             virtual void setToPlay(PieceColor color) = 0;
     };
@@ -47,9 +59,9 @@ namespace fenparserpp
         public:
             SimpleBoard();
             void reset();
-            void setPiece(int file, int rank, Piece piece, PieceColor pieceColor);
-            const Piece getPiece(int file, int rank);
-            const PieceColor getPieceColor(int file, int rank);
+            void setPiece(const BoardPos &bpos, Piece piece, PieceColor pieceColor);
+            Piece getPiece(const BoardPos &bpos) const;
+            PieceColor getPieceColor(const BoardPos &bpos) const;
             void setCastleRight(CastleRight right);
             inline void setToPlay(PieceColor pc) { toPlay = pc; }
             inline const PieceColor getToPlay() { return toPlay; }

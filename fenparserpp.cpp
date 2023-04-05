@@ -40,7 +40,7 @@ bool FENParser::decodeRank(const std::string& rank, int rankNr, BoardListener &l
         } else {
             PieceColor pcolor = getColorFromChar(c);
             Piece piece = getPieceFromChar(c);
-            listener.setPiece(file-'a', rankNr, piece, pcolor);
+            listener.setPiece(BoardPos(file-'a', rankNr), piece, pcolor);
             file = getFileWithOffset(file, 1);
         }
     }
@@ -113,21 +113,27 @@ void SimpleBoard::reset() {
     }
 }
 
-void SimpleBoard::setPiece(int file, int rank, Piece piece, PieceColor pieceColor) {
+void SimpleBoard::setPiece(const BoardPos &bpos, Piece piece, PieceColor pieceColor) {
+    int file = bpos.getFile();
+    int rank = bpos.getRank();
     if(file >= 0 && file < 8 && rank >=0 && rank < 8) {
         board[rank][file] = piece;
         boardColor[rank][file] = pieceColor;
     }
 }
 
-const Piece SimpleBoard::getPiece(int file, int rank) {
+Piece SimpleBoard::getPiece(const BoardPos &bpos) const {
+    int file = bpos.getFile();
+    int rank = bpos.getRank();
     if(file >= 0 && file < 8 && rank >=0 && rank < 8) {
         return board[rank][file];
     }
     return Piece::NONE;
 }
 
-const PieceColor SimpleBoard::getPieceColor(int file, int rank) {
+PieceColor SimpleBoard::getPieceColor(const BoardPos &bpos) const {
+    int file = bpos.getFile();
+    int rank = bpos.getRank();
     if(file >= 0 && file < 8 && rank >=0 && rank < 8) {
         return boardColor[rank][file];
     }
