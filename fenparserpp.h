@@ -48,11 +48,11 @@ namespace fenparserpp
             SimpleBoard();
             void reset();
             void setPiece(int file, int rank, Piece piece, PieceColor pieceColor);
-            Piece getPiece(int file, int rank);
-            PieceColor getPieceColor(int file, int rank);
+            const Piece getPiece(int file, int rank);
+            const PieceColor getPieceColor(int file, int rank);
             void setCastleRight(CastleRight right);
             inline void setToPlay(PieceColor pc) { toPlay = pc; }
-            inline PieceColor getToPlay() { return toPlay; }
+            inline const PieceColor getToPlay() { return toPlay; }
             inline const std::unordered_set<CastleRight>& getCastleRights() { return castleRights; }
     };
 

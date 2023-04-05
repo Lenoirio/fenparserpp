@@ -85,9 +85,14 @@ std::vector<std::string> FENParser::split(const std::string& s, char delim) {
     std::vector<std::string> result;
     std::stringstream ss(s);
     std::string item;
+    int numElements = 0;
 
     while (getline(ss, item, delim)) {
         result.push_back(item);
+        if(++numElements > 20) {    // too many entries, return empty to force abortion
+            result.clear();
+            return result;
+        }
     }
 
     return result;
@@ -115,14 +120,14 @@ void SimpleBoard::setPiece(int file, int rank, Piece piece, PieceColor pieceColo
     }
 }
 
-Piece SimpleBoard::getPiece(int file, int rank) {
+const Piece SimpleBoard::getPiece(int file, int rank) {
     if(file >= 0 && file < 8 && rank >=0 && rank < 8) {
         return board[rank][file];
     }
     return Piece::NONE;
 }
 
-PieceColor SimpleBoard::getPieceColor(int file, int rank) {
+const PieceColor SimpleBoard::getPieceColor(int file, int rank) {
     if(file >= 0 && file < 8 && rank >=0 && rank < 8) {
         return boardColor[rank][file];
     }
