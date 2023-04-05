@@ -1,7 +1,7 @@
 CC              = g++
 CFLAGS          = -c -Wall -std=c++17
-#COPT            = -O3
-COPT            = -g -O0
+COPT            = -O3
+#COPT            = -g -O0
 LIBS			= -lgtest -lgtest_main
 TARGET          = ./target/
 

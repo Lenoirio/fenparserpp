@@ -36,7 +36,11 @@ namespace {
             EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(i,0));
         }
         
-        EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(0,0));
+        auto crights = board.getCastleRights();
+        EXPECT_NE(crights.end(), crights.find(CastleRight::BLACK_KINGSIDE_CASTLE));
+        EXPECT_NE(crights.end(), crights.find(CastleRight::WHITE_KINGSIDE_CASTLE));
+        EXPECT_NE(crights.end(), crights.find(CastleRight::BLACK_QUEENSIDE_CASTLE));
+        EXPECT_NE(crights.end(), crights.find(CastleRight::BLACK_QUEENSIDE_CASTLE));
     }
     TEST(FenParserTest, PosWhiteToMove) {
         FENParser parser;
@@ -52,6 +56,8 @@ namespace {
         EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(1,0));
         EXPECT_EQ(Piece::QUEEN, board.getPiece(4,0));
         EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(4,0));
+        
+        EXPECT_EQ(0, board.getCastleRights().size());
     }
     TEST(FenParserTest, PosBlackToMove) {
         FENParser parser;
@@ -67,5 +73,7 @@ namespace {
         EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(1,0));
         EXPECT_EQ(Piece::QUEEN, board.getPiece(4,0));
         EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(4,0));
+
+        EXPECT_EQ(0, board.getCastleRights().size());
     }
 }

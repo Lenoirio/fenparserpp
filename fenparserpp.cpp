@@ -24,6 +24,10 @@ bool FENParser::parse(const std::string& fen, BoardListener &listener) {
         listener.setToPlay(PieceColor::BLACK);
     }
 
+     if(splitted.size()>2) {
+            handleCastlingRights(listener, splitted.at(2));
+        }
+
     return true;
 }
 
@@ -41,6 +45,21 @@ bool FENParser::decodeRank(const std::string& rank, int rankNr, BoardListener &l
         }
     }
     return true;
+}
+
+void FENParser::handleCastlingRights(BoardListener &listener, const std::string& s) {
+    if(s.find("K") != std::string::npos) {
+        listener.setCastleRight(CastleRight::WHITE_KINGSIDE_CASTLE);
+    }
+    if(s.find("k") != std::string::npos) {
+        listener.setCastleRight(CastleRight::BLACK_KINGSIDE_CASTLE);
+    }
+    if(s.find("Q") != std::string::npos) {
+        listener.setCastleRight(CastleRight::WHITE_QUEENSIDE_CASTLE);
+    }
+    if(s.find("q") != std::string::npos) {
+        listener.setCastleRight(CastleRight::BLACK_QUEENSIDE_CASTLE);
+    }    
 }
 
 Piece FENParser::getPieceFromChar(char ch) {
@@ -80,6 +99,7 @@ SimpleBoard::SimpleBoard() {
 }
 
 void SimpleBoard::reset() {
+    castleRights.clear();
     for(int row =0;row<8;row++) {
         for(int rank=0;rank<8;rank++) {
             board[rank][row] = Piece::NONE;
@@ -109,8 +129,8 @@ PieceColor SimpleBoard::getPieceColor(int file, int rank) {
     return PieceColor::NONE;
 }
 
-void SimpleBoard::setCastleRight(CastleRight right, PieceColor pieceColor) {
-    // TODO
+void SimpleBoard::setCastleRight(CastleRight right) {
+    castleRights.insert(right);
 }
 
 
