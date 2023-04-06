@@ -34,6 +34,14 @@ bool FENParser::parse(const std::string& fen, BoardListener &listener) {
         }
     }
 
+    if(splitted.size()>4) {
+        listener.setHalfMoves(atoi(splitted.at(4).c_str()));
+    }
+
+    if(splitted.size()>5) {
+        listener.setFullMoves(atoi(splitted.at(5).c_str()));
+    }
+
     return true;
 }
 
@@ -76,7 +84,7 @@ bool FENParser::handleEnPassent(BoardListener &listener, const std::string& s) {
         char file = s.at(0);
         char rank = s.at(1);
         if(file>='a' && file <='h' && rank >='1' && rank<='8') {
-            listener.setEnPassentPos( BoardPos(file-'a', rank-'0'-1) );
+            listener.setEnPassantPos( BoardPos(file-'a', rank-'0'-1) );
             return true;
         }
     }
@@ -128,6 +136,8 @@ SimpleBoard::SimpleBoard() {
 void SimpleBoard::reset() {
     castleRights.clear();
     enPassentPos = {};
+    halfMoves = 0;
+    fullMoves = 0;
     for(int row =0;row<8;row++) {
         for(int rank=0;rank<8;rank++) {
             board[rank][row] = Piece::NONE;

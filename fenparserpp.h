@@ -45,14 +45,15 @@ namespace fenparserpp
             inline int getFile() const { return file; }
             inline int getRank() const { return rank; }
     };
-    // TODO en passant position
 
     class BoardListener {
         public:
             virtual void reset() = 0;
             virtual void setPiece(const BoardPos &bpos, Piece piece, PieceColor pieceColor) = 0;
             virtual void setCastleRight(CastleRight right) = 0;
-            virtual void setEnPassentPos(const BoardPos &bpos) = 0;
+            virtual void setEnPassantPos(const BoardPos &bpos) = 0;
+            virtual void setHalfMoves(int hmoves) = 0;
+            virtual void setFullMoves(int fmoves) = 0;
             virtual void setToPlay(PieceColor color) = 0;
     };
 
@@ -63,6 +64,8 @@ namespace fenparserpp
             PieceColor toPlay;
             std::unordered_set<CastleRight> castleRights;
             std::optional<BoardPos> enPassentPos;
+            int halfMoves;
+            int fullMoves;
         public:
             SimpleBoard();
             void reset();
@@ -72,8 +75,12 @@ namespace fenparserpp
             void setCastleRight(CastleRight right);
             inline void setToPlay(PieceColor pc) { toPlay = pc; }
             inline PieceColor getToPlay() const { return toPlay; }
-            inline void setEnPassentPos(const BoardPos &bpos) { enPassentPos = bpos; }
-            inline std::optional<BoardPos> getEnPassentPos() const { return enPassentPos; }
+            inline void setEnPassantPos(const BoardPos &bpos) { enPassentPos = bpos; }
+            inline std::optional<BoardPos> getEnPassantPos() const { return enPassentPos; }
+            inline void setHalfMoves(int hmoves) { halfMoves = hmoves; }
+            inline int getHalfMoves() { return halfMoves; }
+            inline void setFullMoves(int fmoves) { fullMoves = fmoves; }
+            inline int getFullMoves() { return fullMoves; }
             inline const std::unordered_set<CastleRight>& getCastleRights() { return castleRights; }
     };
 

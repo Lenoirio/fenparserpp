@@ -42,12 +42,14 @@ namespace {
         EXPECT_NE(crights.end(), crights.find(CastleRight::BLACK_QUEENSIDE_CASTLE));
         EXPECT_NE(crights.end(), crights.find(CastleRight::BLACK_QUEENSIDE_CASTLE));
         
-        EXPECT_FALSE(board.getEnPassentPos().has_value());
+        EXPECT_FALSE(board.getEnPassantPos().has_value());
+        EXPECT_EQ(0, board.getHalfMoves());
+        EXPECT_EQ(1, board.getFullMoves());
     }
     TEST(FenParserTest, PosWhiteToMove) {
         FENParser parser;
         SimpleBoard board;
-        EXPECT_TRUE(parser.parse("2b2n2/8/8/8/8/8/8/1K2Q3 w - - 0 1", board));
+        EXPECT_TRUE(parser.parse("2b2n2/8/8/8/8/8/8/1K2Q3 w - - 22 33", board));
         EXPECT_EQ(PieceColor::WHITE, board.getToPlay());
         EXPECT_EQ(Piece::BISHOP, board.getPiece(BoardPos(2,7)));
         EXPECT_EQ(PieceColor::BLACK, board.getPieceColor(BoardPos(2,7)));
@@ -60,7 +62,10 @@ namespace {
         EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(BoardPos(4,0)));
         
         EXPECT_EQ(0, board.getCastleRights().size());
-        EXPECT_FALSE(board.getEnPassentPos().has_value());
+        EXPECT_FALSE(board.getEnPassantPos().has_value());
+
+        EXPECT_EQ(22, board.getHalfMoves());
+        EXPECT_EQ(33, board.getFullMoves());
     }
     TEST(FenParserTest, PosBlackToMove) {
         FENParser parser;
@@ -78,14 +83,14 @@ namespace {
         EXPECT_EQ(PieceColor::WHITE, board.getPieceColor(BoardPos(4,0)));
 
         EXPECT_EQ(0, board.getCastleRights().size());
-        EXPECT_FALSE(board.getEnPassentPos().has_value());
+        EXPECT_FALSE(board.getEnPassantPos().has_value());
     }
     TEST(FenParserTest, EnPassant) {
         FENParser parser;
         SimpleBoard board;
         EXPECT_TRUE(parser.parse("rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6", board));
-        EXPECT_TRUE(board.getEnPassentPos().has_value());
-        BoardPos bp = board.getEnPassentPos().value();
+        EXPECT_TRUE(board.getEnPassantPos().has_value());
+        BoardPos bp = board.getEnPassantPos().value();
         EXPECT_EQ(5, bp.getRank());
         EXPECT_EQ(5, bp.getFile());
     }
