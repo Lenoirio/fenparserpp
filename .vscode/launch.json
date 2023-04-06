@@ -9,7 +9,7 @@
             "name": "(gdb) Starten",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/home/markus/projects/fenparserpp/target/fentest",
+            "program": "${workspaceRoot}/target/fentest",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
