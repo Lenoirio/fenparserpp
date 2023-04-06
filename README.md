@@ -20,7 +20,7 @@ For usage, please just take a look at the test-cases in the file *parsertest.cpp
 ### Simple usage example
         FENParser parser;
         SimpleBoard board;
-        bool ok = parser.parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+        bool ok = parser.parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", board);
 
 Whereas *ok* will be *true* if parsing did not encounter errors.
 *board* will be filled with the information from the FEN-string and you can use simple getters to get information of the position.
