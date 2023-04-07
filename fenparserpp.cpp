@@ -20,8 +20,10 @@ bool FENParser::parse(const std::string& fen, BoardListener &listener) {
     }
     if(splitted.at(1) == "w") {
         listener.setToPlay(PieceColor::WHITE);
-    } else {
+    } else if(splitted.at(1) == "b") {
         listener.setToPlay(PieceColor::BLACK);
+    } else {
+        return false;
     }
 
     if(splitted.size()>2) {
