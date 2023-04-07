@@ -56,6 +56,9 @@ bool FENParser::decodeRank(const std::string& rank, int rankNr, BoardListener &l
         } else {
             PieceColor pcolor = getColorFromChar(c);
             Piece piece = getPieceFromChar(c);
+            if(piece == Piece::NONE) {  // unknown piece character
+                return false;
+            }
             listener.setPiece(BoardPos(file-'a', rankNr), piece, pcolor);
             file = getFileWithOffset(file, 1);
         }
