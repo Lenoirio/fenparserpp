@@ -1,3 +1,7 @@
+/**
+ * FEN Parser   (c) Markus Gietzen
+ * Released under MIT license (see LICENSE.txt)
+*/
 #include "fenparserpp.h"
 
 namespace fenparserpp {
